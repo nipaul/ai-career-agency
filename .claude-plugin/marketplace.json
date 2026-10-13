@@ -1,0 +1,23 @@
+{
+  "name": "ai-career-agency",
+  "description": "An AI-native career agency: tailors resumes, cover letters, fit briefs and outreach to any job posting, using only facts you've verified.",
+  "owner": {
+    "name": "Nithin Paul",
+    "url": "https://github.com/nipaul"
+  },
+  "plugins": [
+    {
+      "name": "career-agency",
+      "source": "./",
+      "description": "Tailors resumes, cover letters, fit briefs and outreach to any job posting, using only facts you've verified.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "keywords": [
+        "resume",
+        "career",
+        "job-search",
+        "agent-skills"
+      ]
+    }
+  ]
+}

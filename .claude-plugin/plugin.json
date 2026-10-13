@@ -1,0 +1,13 @@
+{
+  "name": "career-agency",
+  "version": "0.1.0",
+  "description": "An AI-native career agency for your terminal: tailors resumes, cover letters, fit briefs and outreach to any job posting, using only facts you've verified.",
+  "author": {
+    "name": "Nithin Paul",
+    "url": "https://github.com/nipaul"
+  },
+  "homepage": "https://github.com/nipaul/ai-career-agency",
+  "repository": "https://github.com/nipaul/ai-career-agency",
+  "license": "MIT",
+  "keywords": ["claude-code", "claude-plugin", "agent-skills", "ai-agents", "career", "resume", "job-search"]
+}

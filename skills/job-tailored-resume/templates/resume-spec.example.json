@@ -1,0 +1,55 @@
+{
+  "header": { "contact": true },
+  "sections": [
+    {
+      "title": "PROFILE",
+      "type": "paragraphs",
+      "items": [
+        "Technical product manager building **AI-assisted patient-access features** in healthcare. Led a zero-downtime migration of **120,000** monthly bookings and an API program adopted by **60** partners."
+      ]
+    },
+    {
+      "title": "CAREER HIGHLIGHTS",
+      "type": "bullets",
+      "items": [
+        "**Cut appointment no-shows by 18%** across 40 clinics with an AI-assisted reminder flow.",
+        "**Raised self-serve activation from 31% to 44%** by redesigning onboarding."
+      ]
+    },
+    {
+      "title": "PROFESSIONAL EXPERIENCE",
+      "type": "roles",
+      "items": [
+        {
+          "title": "Senior Product Manager",
+          "org_line": "Harbor Health Systems | Full-time | Portland, OR, USA | Jun 2021 – Present",
+          "summary": "Also served as Product Owner for the Patient Access team.",
+          "bullets": [
+            "**Launched an AI-assisted appointment-reminder flow** that cut no-shows by **18%** across 40 clinics within two quarters.",
+            "**Owned end-to-end delivery** of the scheduling-platform migration, moving **120,000** monthly bookings with zero downtime."
+          ]
+        },
+        {
+          "title": "Technical Product Manager",
+          "org_line": "Brightline Software | Seattle, WA, USA | Mar 2016 – May 2021",
+          "bullets": [
+            "**Shipped v2 of the REST API**, adopted by **60** partner integrations."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "SKILLS",
+      "type": "labeled",
+      "items": [
+        { "label": "Product", "text": "roadmaps, discovery, experimentation, backlog ownership" },
+        { "label": "Technical", "text": "REST APIs, SQL, TypeScript, Python" }
+      ]
+    },
+    {
+      "title": "EDUCATION",
+      "type": "paragraphs",
+      "items": ["Bachelor of Science (Computer Science)"]
+    }
+  ]
+}

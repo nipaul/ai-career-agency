@@ -1,0 +1,35 @@
+# ---- Personal career data must never be committed to this repo ----
+career-inventory.md
+profile.json
+private/
+.career-agency/
+*.local.md
+
+# Per-application working files and outputs
+keywords.json
+spec.json
+job-posting.txt
+Fit Brief.md
+Outreach.md
+*.docx
+*.pdf
+preview*.png
+
+# Build output from tools/package.py
+dist/
+
+# Python / OS / editor
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.env
+.env.*
+Claude outputs/career-agency-plugin.zip
+Claude outputs/job-tailored-resume-skill.zip
+
+# Local scratch output
+Claude outputs/
