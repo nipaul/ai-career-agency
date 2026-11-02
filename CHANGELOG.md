@@ -6,6 +6,20 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-02
+
+### Changed
+- Split `job-tailored-resume` into outcome-based skills: `job-fit`, `generate-resume` and `outreach-blurbs`.
+  `job-tailored-resume` remains as a thin orchestrator that runs all three and accepts the same `r`, `cl`, `fit`
+  and `out` switches.
+- `tools/package.py` now builds one skill zip per skill (`<skill>-skill.zip`) next to the plugin zip.
+
+### Added
+- Expanded outreach templates: recruiter and hiring-manager variants, referral ask, follow-up and closed-posting wording.
+- `shared/` source files and `tools/sync_shared.py` keep the common rules, posting analysis and example templates
+  identical across skills.
+- Layout tests: skill folder names match frontmatter, shared copies are in sync, referenced files exist.
+
 ## [0.1.0] - 2026-10-13
 
 ### Added
