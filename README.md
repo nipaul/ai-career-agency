@@ -75,6 +75,8 @@ same account).
 4. Find **career-agency** in the list (open **Discover** if it isn't shown) and select **Add** or **Install**.
 5. Open the plugin and check its **Skills** tab lists `job-fit`, `generate-resume`, `outreach-blurbs` and `job-tailored-resume`.
 
+![Installing the career-agency plugin from the claude.ai interface](assets/ai-career-agency-install.gif)
+
 To pick up new versions later, open the marketplace and select **Check for updates**, or turn on **Sync
 automatically**.
 
