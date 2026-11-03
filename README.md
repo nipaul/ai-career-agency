@@ -73,7 +73,7 @@ same account).
 2. Select **Add**, then **Add marketplace**.
 3. Enter `nipaul/ai-career-agency` and confirm.
 4. Find **career-agency** in the list (open **Discover** if it isn't shown) and select **Add** or **Install**.
-5. Open the plugin and check its **Skills** tab lists `job-tailored-resume`.
+5. Open the plugin and check its **Skills** tab lists `job-fit`, `generate-resume`, `outreach-blurbs` and `job-tailored-resume`.
 
 To pick up new versions later, open the marketplace and select **Check for updates**, or turn on **Sync
 automatically**.
