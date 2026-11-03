@@ -1,6 +1,6 @@
 {
   "name": "career-agency",
-  "version": "0.2.0",
+  "version": "0.2.0-beta.1",
   "description": "An AI-native career agency for your terminal: tailors resumes, cover letters, fit briefs and outreach to any job posting, using only facts you've verified.",
   "author": {
     "name": "Nithin Paul",
