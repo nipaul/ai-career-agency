@@ -9,9 +9,10 @@ Outputs
     dist/career-agency-plugin.zip
         The whole plugin. Upload with  Customize > Plugins > Add > Upload plugin.
         Contains one .claude-plugin/plugin.json at the top level.
-    dist/job-tailored-resume-skill.zip
-        Just the skill, for  Customize > Skills > Upload skill  (claude.ai needs code execution turned on).
-        The skill folder itself is the top level of the archive: job-tailored-resume/SKILL.md.
+    dist/<skill>-skill.zip   (one per folder under skills/)
+        Just that skill, for  Customize > Skills > Upload skill  (claude.ai needs code execution turned on).
+        The skill folder itself is the top level of the archive: <skill>/SKILL.md.
+        The job-tailored-resume orchestrator only chains the other skills, so install them together (use the plugin).
 
 Works on Windows, macOS and Linux (standard library only). Never packages personal data: only files under the
 paths below are included, and anything matching EXCLUDE is skipped.
@@ -21,9 +22,10 @@ import sys
 import zipfile
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 ROOT = Path(__file__).resolve().parent.parent
 DIST = ROOT / "dist"
-SKILL = ROOT / "skills" / "job-tailored-resume"
+SKILLS = ROOT / "skills"
 
 PLUGIN_INCLUDE = [".claude-plugin", "skills", "README.md", "LICENSE", "CHANGELOG.md"]
 EXCLUDE_NAMES = {"__pycache__", ".DS_Store", "Thumbs.db", ".git", "private", ".career-agency"}
@@ -58,30 +60,46 @@ def write_zip(out: Path, entries):
     return out
 
 
+def skill_dirs():
+    return sorted(p for p in SKILLS.iterdir() if p.is_dir() and (p / "SKILL.md").is_file())
+
+
 def main():
+    # Shared files are copied into each skill; refuse to package stale copies.
+    from sync_shared import main as sync_main
+    if sync_main(check=True):
+        sys.exit("shared copies are out of date")
+
     plugin_entries = []
     for item in PLUGIN_INCLUDE:
         for f in files_under(ROOT / item):
             plugin_entries.append((f, f.relative_to(ROOT).as_posix()))
-    skill_entries = [(f, ("job-tailored-resume/" + f.relative_to(SKILL).as_posix()))
-                     for f in files_under(SKILL)]
-
     plugin_zip = write_zip(DIST / "career-agency-plugin.zip", plugin_entries)
-    skill_zip = write_zip(DIST / "job-tailored-resume-skill.zip", skill_entries)
+
+    skills = skill_dirs()
+    assert skills, "no skills found under skills/"
+    skill_zips = []
+    for sd in skills:
+        entries = [(f, f"{sd.name}/{f.relative_to(sd).as_posix()}") for f in files_under(sd)]
+        skill_zips.append((sd.name, write_zip(DIST / f"{sd.name}-skill.zip", entries)))
 
     # Self-check: the shapes claude.ai and the desktop app require.
     with zipfile.ZipFile(plugin_zip) as z:
         names = z.namelist()
         assert names.count(".claude-plugin/plugin.json") == 1, "plugin zip needs exactly one .claude-plugin/plugin.json"
-        assert any(n.startswith("skills/job-tailored-resume/SKILL.md") for n in names)
-    with zipfile.ZipFile(skill_zip) as z:
-        names = z.namelist()
-        assert "job-tailored-resume/SKILL.md" in names, "skill zip must have <skill-name>/SKILL.md at the top level"
-        assert all(n.startswith("job-tailored-resume/") for n in names), "every entry must sit inside the skill folder"
+        for sd in skills:
+            assert f"skills/{sd.name}/SKILL.md" in names, f"plugin zip is missing skills/{sd.name}/SKILL.md"
         leaked = [n for n in names if n.endswith(("career-inventory.md", "profile.json"))]
-        assert not leaked, f"personal data files in package: {leaked}"
+        assert not leaked, f"personal data files in plugin package: {leaked}"
+    for name, zpath in skill_zips:
+        with zipfile.ZipFile(zpath) as z:
+            names = z.namelist()
+            assert f"{name}/SKILL.md" in names, "skill zip must have <skill-name>/SKILL.md at the top level"
+            assert all(n.startswith(f"{name}/") for n in names), "every entry must sit inside the skill folder"
+            leaked = [n for n in names if n.endswith(("career-inventory.md", "profile.json"))]
+            assert not leaked, f"personal data files in package: {leaked}"
 
-    for z in (plugin_zip, skill_zip):
+    for z in [plugin_zip] + [zp for _, zp in skill_zips]:
         print(f"wrote {z.relative_to(ROOT)}  ({z.stat().st_size / 1024:.0f} KB)")
         if "--list" in sys.argv:
             with zipfile.ZipFile(z) as zf:

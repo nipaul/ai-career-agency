@@ -10,7 +10,7 @@
       "name": "career-agency",
       "source": "./",
       "description": "Tailors resumes, cover letters, fit briefs and outreach to any job posting, using only facts you've verified.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "license": "MIT",
       "keywords": [
         "resume",

@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SKILL = ROOT / "skills" / "job-tailored-resume"
+SKILL = ROOT / "skills" / "generate-resume"
 sys.path.insert(0, str(SKILL / "scripts"))
 
 import check_resume as cr  # noqa: E402

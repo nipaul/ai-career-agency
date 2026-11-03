@@ -8,7 +8,14 @@ credits that fit, and writes the pitch, but never invents a role you didn't play
 you keep a **career inventory** of verified facts, and the agent tailors from it. It cannot add a number that
 isn't in your inventory, and a script checks that before anything ships.
 
-> **v0.1** ships one agent: `job-tailored-resume`. More skills for the agency may follow.
+> **v0.2** splits the agent into outcome-based skills you can use alone or together:
+>
+> | Skill | Outcome |
+> |---|---|
+> | `job-fit` | Should I apply? Match rating, gaps, keyword coverage and interview stories (`Fit Brief.md`) |
+> | `generate-resume` | Tailored resume and cover letter (`.docx` + `.pdf`) with the fact guard |
+> | `outreach-blurbs` | LinkedIn note, recruiter / hiring-manager email, referral ask and follow-up (`Outreach.md`) |
+> | `job-tailored-resume` | Runs all three in order, like v0.1 |
 
 ## What you get per job posting
 
@@ -19,7 +26,7 @@ isn't in your inventory, and a script checks that before anything ships.
 | Fit brief | A candid match rating, gaps, keyword coverage and interview stories (`Fit Brief.md`) |
 | Outreach | A LinkedIn note and a short email for the recruiter or hiring manager (`Outreach.md`) |
 
-Ask for the whole package or only part: `r` (resume), `cl` (cover letter), `fit` (should I apply?), `out` (outreach).
+Ask for the whole package with `job-tailored-resume`, or run one skill. The switches `r` (resume), `cl` (cover letter), `fit` (should I apply?) and `out` (outreach) still work with `job-tailored-resume`.
 
 ---
 
@@ -66,7 +73,9 @@ same account).
 2. Select **Add**, then **Add marketplace**.
 3. Enter `nipaul/ai-career-agency` and confirm.
 4. Find **career-agency** in the list (open **Discover** if it isn't shown) and select **Add** or **Install**.
-5. Open the plugin and check its **Skills** tab lists `job-tailored-resume`.
+5. Open the plugin and check its **Skills** tab lists `job-fit`, `generate-resume`, `outreach-blurbs` and `job-tailored-resume`.
+
+![Installing the career-agency plugin from the claude.ai interface](assets/ai-career-agency-install.gif)
 
 To pick up new versions later, open the marketplace and select **Check for updates**, or turn on **Sync
 automatically**.
@@ -96,7 +105,7 @@ a copy you have modified.
    ```
    python tools/package.py
    ```
-   This writes `dist/career-agency-plugin.zip` and `dist/job-tailored-resume-skill.zip`.
+   This writes `dist/career-agency-plugin.zip` and one `dist/<skill>-skill.zip` per skill.
 2. In claude.ai or the desktop app: **Customize > Plugins > Add > Upload plugin**, and choose
    `career-agency-plugin.zip`.
 
@@ -106,10 +115,10 @@ If your organization blocks plugin uploads but allows skills:
 
 1. Turn on code execution (see *Before you start*).
 2. **Customize > Skills > Upload skill** (or **Settings > Capabilities > Skills > Upload skill**), and choose
-   `job-tailored-resume-skill.zip` from `python tools/package.py`.
+   the zip for the skill you want (for example `generate-resume-skill.zip`) from `python tools/package.py`. The `job-tailored-resume` orchestrator only chains the other skills, so use the plugin if you want it.
 3. Turn the skill on in the list.
 
-The zip must contain the skill folder itself at the top level (`job-tailored-resume/SKILL.md`). The packaging script
+The zip must contain the skill folder itself at the top level (for example `generate-resume/SKILL.md`). The packaging script
 guarantees that. If you zip it by hand, zip the folder, not the files inside it.
 
 > **Private repository?** For a marketplace you add yourself, public GitHub repositories work directly. For a
@@ -130,7 +139,7 @@ Your inventory is two small files:
 **You don't have to write them by hand.** On first run the agent notices you have no inventory, asks for your
 existing resumes (PDF, Word or pasted text), drafts the inventory, and walks you through confirming every number,
 title and date. Annotated starter files with fictional data are in
-[`skills/job-tailored-resume/templates/`](skills/job-tailored-resume/templates/) if you'd rather fill them in
+[`shared/templates/`](shared/templates/) if you'd rather fill them in
 yourself.
 
 #### Setup for browser and desktop Chat (Project knowledge)
@@ -183,7 +192,7 @@ current directory, then `~/.career-agency/`.
 ### Part 3: Use it
 
 Describe the task, or pick the skill yourself. Type `/` in the message box and choose
-**`career-agency:job-tailored-resume`** (Claude Code: `/career-agency:job-tailored-resume`).
+**`career-agency:job-fit`**, **`career-agency:generate-resume`**, **`career-agency:outreach-blurbs`** or **`career-agency:job-tailored-resume`** for the full package (Claude Code: `/career-agency:job-fit` and so on).
 
 Examples:
 
@@ -210,9 +219,9 @@ anything you may have edited or sent.
 
 ### Check that it works
 
-1. **Customize > Plugins** lists *career-agency*, and its **Skills** tab shows `job-tailored-resume`.
+1. **Customize > Plugins** lists *career-agency*, and its **Skills** tab shows `job-fit`, `generate-resume`, `outreach-blurbs` and `job-tailored-resume`.
 2. **Customize > Skills** shows the skill toggled on.
-3. Type `/` in a chat and `career-agency:job-tailored-resume` appears in the menu.
+3. Type `/` in a chat and the four `career-agency:` skills appear in the menu.
 4. Say *"Set up my career inventory"* with no files attached. The agent should ask for your resumes. That
    confirms the skill loaded.
 
@@ -221,7 +230,7 @@ anything you may have edited or sent.
 | Symptom | Likely cause and fix |
 |---|---|
 | Plugins or Skills missing from **Customize** | You're on the Free plan, or your organization has them off. Ask an Owner. |
-| Skill upload is rejected | The zip has `SKILL.md` at its root instead of inside `job-tailored-resume/`, or the folder name doesn't match the skill name. Rebuild with `python tools/package.py`. |
+| Skill upload is rejected | The zip has `SKILL.md` at its root instead of inside its skill folder (for example `generate-resume/`), or the folder name doesn't match the skill name. Rebuild with `python tools/package.py`. |
 | Plugin upload is rejected | The archive must contain exactly one `.claude-plugin/plugin.json`. Use the packaged zip. |
 | The agent builds nothing, or says it can't run scripts | Turn on **Code execution and file creation** in Settings > Capabilities. |
 | *"Career inventory not found"* | The agent can't see your files. In chat, add them to the Project's knowledge or attach them; in Cowork, choose the folder that holds them; in Claude Code, set `CAREER_AGENCY_HOME`. |
@@ -270,11 +279,13 @@ sessions. Everything here is plain text and Python you can read before installin
 .claude-plugin/
   plugin.json            plugin manifest (name: career-agency)
   marketplace.json       makes this repo addable as a marketplace
-skills/job-tailored-resume/
-  SKILL.md               the workflow
-  references/            playbook (tailoring rules) and companion-document templates
-  scripts/               build_docx.py, check_resume.py
-  templates/             example inventory, profile and resume spec (fictional data)
+skills/
+  job-fit/               fit assessment: SKILL.md, references/ (fit-brief.md)
+  outreach-blurbs/       outreach messages: SKILL.md, references/ (outreach-templates.md)
+  generate-resume/       resume + cover letter: SKILL.md, references/, scripts/ (build_docx.py, check_resume.py), templates/
+  job-tailored-resume/   orchestrator that chains the three skills
+shared/                  source of the text every skill carries a copy of (common.md, posting-analysis.md, templates/)
+tools/sync_shared.py     copies shared/ into each skill (--check verifies, used by tests)
 tools/package.py         builds the upload zips in dist/
 ```
 
@@ -282,11 +293,13 @@ tools/package.py         builds the upload zips in dist/
 
 ```bash
 # Build a sample resume from the fictional data
-cd skills/job-tailored-resume
+cd skills/generate-resume
 python3 scripts/build_docx.py templates/resume-spec.example.json /tmp/sample.docx --pdf \
   --profile templates/profile.example.json
 python3 scripts/check_resume.py /tmp/sample.docx --inventory templates/career-inventory.example.md
 ```
+
+After editing anything in `shared/`, run `python tools/sync_shared.py` to refresh the copies in each skill.
 
 Run the tests (needs `pip install python-docx` for the end-to-end case):
 

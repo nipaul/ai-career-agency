@@ -1,0 +1,10 @@
+{
+  "name": "Jordan Avery",
+  "contact": [
+    { "label": "Email", "text": "jordan.avery@example.com", "url": "mailto:jordan.avery@example.com" },
+    { "label": "Mobile", "text": "555-0100", "url": null },
+    { "label": "LinkedIn", "text": "https://www.linkedin.com/in/jordan-avery-example", "url": "https://www.linkedin.com/in/jordan-avery-example" },
+    { "label": "GitHub", "text": "https://github.com/jordan-avery-example", "url": "https://github.com/jordan-avery-example" }
+  ],
+  "jobs_folder": "~/Documents/Job Search"
+}
