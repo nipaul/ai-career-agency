@@ -33,7 +33,8 @@ Paths are relative to this skill's folder.
 4. **Write the messages** from `references/outreach-templates.md`. By default give the LinkedIn note and the
    email/InMail for the audience asked about; give the other types when the user asks for "all" or a full set.
 5. **Check the facts.** Every number and claim must come from the inventory. Keep the proof point identical to the
-   one used in any existing resume.
+   one used in any existing resume. Numbers in the ask itself (for example "15 minutes") and in length limits are
+   not metrics and don't need to trace to the inventory. Every claim about the candidate's results does.
 6. **Save** `Outreach.md` in the posting folder (version suffix if one exists), and reply in chat with the
    messages themselves so the user can copy them straight away.
 
